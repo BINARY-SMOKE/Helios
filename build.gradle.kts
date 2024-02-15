@@ -11,6 +11,7 @@ repositories {
 
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
+    implementation(kotlin("stdlib"))
 }
 
 tasks.test {
@@ -18,4 +19,10 @@ tasks.test {
 }
 kotlin {
     jvmToolchain(21)
+}
+
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "at.app.Main"
+    }
 }
