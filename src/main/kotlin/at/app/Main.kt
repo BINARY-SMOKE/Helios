@@ -99,4 +99,5 @@ fun reader() {
             else -> println("Invalid choice. Please enter 1 or 2.")
         }
     }
+    println("\u001B[97m")
 }
