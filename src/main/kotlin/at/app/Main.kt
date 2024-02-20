@@ -3,38 +3,30 @@ package org.example.at
 import kotlinx.cli.ArgParser
 import kotlinx.cli.ArgType
 import kotlinx.cli.required
+import java.io.File
+import java.io.FileNotFoundException
 import java.util.*
 
-class CommandLineOptions(parser: ArgParser) {
-    val input by parser.option(ArgType.String, shortName = "i", description = "Der Eingabedateipfad").required()
-    val output by parser.option(ArgType.String, shortName = "o", description = "Der Ausgabedateipfad").required()
-}
-
 fun main(args: Array<String>) {
-    val parser = ArgParser("YourApplication")
-    val options = CommandLineOptions(parser)
-    printWelcomeMessage()
+
     try {
-        parser.parse(args)
 
         // Hier können Sie die initiale Konfiguration durchführen oder Aufgaben vor der Schleife erledigen.
+        printWelcomeMessage()
 
         // Schleife für die dauerhafte Ausführung
         while (true) {
             val scanner = Scanner(System.`in`)
 
-            print("Geben Sie etwas ein: ")
+            print("Helios$: ")
             val userInput = scanner.nextLine()
 
-            println("Sie haben eingegeben: $userInput")
+            if (userInput == "R") {
+                reader()
+            } else {
+                println("Command not found")
+            }
 
-            // Hier können Sie die wiederholende Funktionalität Ihrer Anwendung implementieren.
-            // Zum Beispiel: Daten verarbeiten, auf Benutzereingaben warten, usw.
-
-            println("Eingabedateipfad: ${options.input}")
-            println("Ausgabedateipfad: ${options.output ?: "Nicht angegeben"}")
-
-            // Kurze Pause, um die CPU nicht zu belasten (kann je nach Anforderungen angepasst werden)
             Thread.sleep(1000)
         }
     } catch (e: Exception) {
@@ -65,4 +57,46 @@ fun printWelcomeMessage() {
                                                                FOR MENUE PRESS ...................... M
     """)
     println("\u001B[37m")
+}
+
+fun displayTextFile(filePath: String) {
+    try {
+        val file = File(filePath)
+        val content = file.readText()
+        println(content)
+    } catch (e: FileNotFoundException) {
+        println("Error: File '$filePath' not found.")
+    } catch (e: Exception) {
+        println("An error occurred: ${e.message}")
+    }
+}
+
+fun reader() {
+    while (true) {
+        println("\n1. Display .txt file")
+        println("2. Exit")
+
+        print("Enter your choice (1/2): ")
+        val choice = readLine()
+
+        when (choice) {
+            "1" -> {
+                print("Enter the path of the .txt file: ")
+                val filePath = readlnOrNull()
+                println("Attempting to read file: $filePath")
+                if (filePath != null) {
+                    displayTextFile(filePath)
+                } else {
+                    println("Invalid file path.")
+                }
+            }
+
+            "2" -> {
+                println("Exiting program. Goodbye!")
+                break
+            }
+
+            else -> println("Invalid choice. Please enter 1 or 2.")
+        }
+    }
 }
