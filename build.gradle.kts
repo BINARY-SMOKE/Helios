@@ -22,8 +22,17 @@ kotlin {
     jvmToolchain(21)
 }
 
+sourceSets {
+    main {
+        resources {
+            srcDirs("src/main/resources")
+            // Hier können Sie weitere Verzeichnisse hinzufügen, falls benötigt
+        }
+    }
+}
+
 tasks.jar {
     manifest {
-        attributes["Main-Class"] = "at.app.Main"
+        attributes["Main-Class"] = "at.app.Mainkt"
     }
 }
