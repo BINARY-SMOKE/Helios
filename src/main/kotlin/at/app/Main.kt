@@ -3,6 +3,7 @@ package org.example.at
 import kotlinx.cli.ArgParser
 import kotlinx.cli.ArgType
 import kotlinx.cli.required
+import java.util.*
 
 class CommandLineOptions(parser: ArgParser) {
     val input by parser.option(ArgType.String, shortName = "i", description = "Der Eingabedateipfad").required()
@@ -20,6 +21,12 @@ fun main(args: Array<String>) {
 
         // Schleife für die dauerhafte Ausführung
         while (true) {
+            val scanner = Scanner(System.`in`)
+
+            print("Geben Sie etwas ein: ")
+            val userInput = scanner.nextLine()
+
+            println("Sie haben eingegeben: $userInput")
 
             // Hier können Sie die wiederholende Funktionalität Ihrer Anwendung implementieren.
             // Zum Beispiel: Daten verarbeiten, auf Benutzereingaben warten, usw.
@@ -38,7 +45,7 @@ fun main(args: Array<String>) {
 }
 
 fun printWelcomeMessage() {
-    println("\u001B[32m")
+    print("\u001B[32m")
     println("""
         |    |  |¯¯¯¯  |      |  /¯¯¯\    /¯¯¯¯
         |----|  |----  |      | |     |  /____
@@ -57,4 +64,5 @@ fun printWelcomeMessage() {
                                                                FOR MENUE PRESS ...................... M
                                                                FOR MENUE PRESS ...................... M
     """)
+    println("\u001B[37m")
 }
