@@ -45,7 +45,7 @@ fun printWelcomeMessage() {
                                                                FOR MENUE PRESS ...................... M
                                                                FOR MENUE PRESS ...................... M
     """)
-    println("\u001B[37m")
+    println("\u001B[97m")
 }
 
 fun displayTextFile(filePath: String) {
