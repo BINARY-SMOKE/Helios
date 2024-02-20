@@ -1,4 +1,4 @@
-package org.example.at
+package at.app
 
 import kotlinx.cli.ArgParser
 import kotlinx.cli.ArgType
