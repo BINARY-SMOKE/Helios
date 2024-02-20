@@ -12,7 +12,7 @@ class CommandLineOptions(parser: ArgParser) {
 fun main(args: Array<String>) {
     val parser = ArgParser("YourApplication")
     val options = CommandLineOptions(parser)
-
+    printWelcomeMessage()
     try {
         parser.parse(args)
 
@@ -20,6 +20,7 @@ fun main(args: Array<String>) {
 
         // Schleife für die dauerhafte Ausführung
         while (true) {
+
             // Hier können Sie die wiederholende Funktionalität Ihrer Anwendung implementieren.
             // Zum Beispiel: Daten verarbeiten, auf Benutzereingaben warten, usw.
 
@@ -36,3 +37,24 @@ fun main(args: Array<String>) {
     }
 }
 
+fun printWelcomeMessage() {
+    println("\u001B[32m")
+    println("""
+        |    |  |¯¯¯¯  |      |  /¯¯¯\    /¯¯¯¯
+        |----|  |----  |      | |     |  /____
+        |    |  |____  |____  |  \___/   ____/  ©     
+      /¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯/
+     /       WELCOME FRIEND -------------------------------->  FOR MENUE PRESS ...................... M
+    /_____________________________________________________/    FOR MENUE PRESS ...................... M
+                                                               FOR MENUE PRESS ...................... M
+                                                               FOR MENUE PRESS ...................... M
+                                                               FOR MENUE PRESS ...................... M
+                                                               FOR MENUE PRESS ...................... M
+                                                               FOR MENUE PRESS ...................... M
+                                                               FOR MENUE PRESS ...................... M
+                                                               FOR MENUE PRESS ...................... M
+                                                               FOR MENUE PRESS ...................... M
+                                                               FOR MENUE PRESS ...................... M
+                                                               FOR MENUE PRESS ...................... M
+    """)
+}
