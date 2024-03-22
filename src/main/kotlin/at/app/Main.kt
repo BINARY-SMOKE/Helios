@@ -23,9 +23,9 @@ fun main(args: Array<String>) {
             "R" -> reader()
             "M" -> modifyFile()
             "S" -> {
-                print("Enter the keyword to search for in DLL files: ")
+                print("Enter the keyword to search for: ")
                 val keyword = readLine()
-                print("Enter the directory, if you don't specify the C: will be searched: ")
+                print("Enter the directory, if you don't specify C: will be searched: ")
                 val directory = readLine()
                 if (keyword != null) {
                     searchInDirectory(keyword, directory ?: "")
@@ -102,7 +102,7 @@ fun modifyFile() {
 
 fun reader() {
     while (true) {
-        println("\n1. Display .txt file")
+        println("\n1. Display file")
 
         println("2. Modify")
         println("3. Exit")
@@ -112,7 +112,7 @@ fun reader() {
 
         when (choice) {
             "1" -> {
-                print("Enter the path of the .txt file: ")
+                print("Enter the path of the file: ")
                 val filePath = readLine()
                 println("Attempting to read file: $filePath")
                 if (filePath != null) {
@@ -155,7 +155,7 @@ fun searchFiles(directory: File, keyword: String): List<File> {
 
                 randomAccessFile.close()
             } catch (e: Exception) {
-                println("Fehler beim Lesen der Datei ${file.absolutePath}: ${e.message}")
+                println("File: { ${file.absolutePath}  } could not be read because: { ${e.message} }")
             }
         }
     }
@@ -165,12 +165,12 @@ fun searchFiles(directory: File, keyword: String): List<File> {
 
 fun searchInDirectory(keyword: String, directory: String)
 {
+    val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+
     val startTime = LocalTime.now()
+    val formattedTimeStart = startTime.format(formatter)
 
-    val formatterStart = DateTimeFormatter.ofPattern("HH:mm:ss")
-    val formattedTimeStart = startTime.format(formatterStart)
-
-    println("Suche begonnen um: $formattedTimeStart")
+    println("Start: { $formattedTimeStart }")
 
     val dllDirectory: File
 
@@ -183,16 +183,14 @@ fun searchInDirectory(keyword: String, directory: String)
     val result = searchFiles(dllDirectory, keyword)
 
     if (result.isNotEmpty()) {
-        println("Folgende Dateien wurden gefunden:")
+        println("Files found:")
         result.forEach { println(it.absolutePath) }
     } else {
-        println("Es wurden keine DLL-Dateien mit dem angegebenen Suchwort gefunden.")
+        println("No files with this keyword found.")
     }
 
     val endTime = LocalTime.now()
+    val formattedTimeEnd = endTime.format(formatter)
 
-    val formatterEnd = DateTimeFormatter.ofPattern("HH:mm:ss")
-    val formattedTimeEnd = endTime.format(formatterEnd)
-
-    println("Suche abgeschlossen um: $formattedTimeEnd")
+    println("End: $formattedTimeEnd")
 }
