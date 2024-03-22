@@ -2,13 +2,17 @@ package at.app
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileWriter
+import java.io.RandomAccessFile
+import java.nio.charset.Charset
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 fun main(args: Array<String>) {
-    // Hier können Sie die initiale Konfiguration durchführen oder Aufgaben vor der Schleife erledigen.
+
     printWelcomeMessage()
 
-    // Schleife für die dauerhafte Ausführung
+
     while (true) {
         val scanner = Scanner(System.`in`)
 
@@ -18,6 +22,17 @@ fun main(args: Array<String>) {
         when (userInput) {
             "R" -> reader()
             "M" -> modifyFile()
+            "S" -> {
+                print("Enter the keyword to search for in DLL files: ")
+                val keyword = readLine()
+                print("Enter the directory, if you don't specify the C: will be searched: ")
+                val directory = readLine()
+                if (keyword != null) {
+                    searchInDirectory(keyword, directory ?: "")
+                } else {
+                    println("Invalid keyword.")
+                }
+            }
             else -> println("Command not found")
         }
 
@@ -32,9 +47,9 @@ fun printWelcomeMessage() {
         |----|  |----  |      | |     |  /____
         |    |  |____  |____  |  \___/   ____/  ©     
       /¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯/
-     /       WELCOME FRIEND -------------------------------->  FOR MENUE PRESS ...................... M
-    /_____________________________________________________/    FOR MENUE PRESS ...................... M
-                                                               FOR MENUE PRESS ...................... M
+     /       WELCOME FRIEND -------------------------------->  FOR READER PRESS ..................... R
+    /_____________________________________________________/    FOR MODIFY PRESS ..................... M
+                                                               FOR SEARCH PRESS ..................... S
                                                                FOR MENUE PRESS ...................... M
                                                                FOR MENUE PRESS ...................... M
                                                                FOR MENUE PRESS ...................... M
@@ -121,4 +136,63 @@ fun reader() {
         }
     }
     println("\u001B[97m")
+}
+
+fun searchFiles(directory: File, keyword: String): List<File> {
+    val foundFiles = mutableListOf<File>()
+
+    directory.walkTopDown().forEach { file ->
+        if (file.isFile) {
+            try {
+                val randomAccessFile = RandomAccessFile(file, "r")
+                val bytes = ByteArray(randomAccessFile.length().toInt())
+                randomAccessFile.readFully(bytes)
+                val content = String(bytes, Charset.defaultCharset())
+
+                if (content.contains(keyword)) {
+                    foundFiles.add(file)
+                }
+
+                randomAccessFile.close()
+            } catch (e: Exception) {
+                println("Fehler beim Lesen der Datei ${file.absolutePath}: ${e.message}")
+            }
+        }
+    }
+
+    return foundFiles
+}
+
+fun searchInDirectory(keyword: String, directory: String)
+{
+    val startTime = LocalTime.now()
+
+    val formatterStart = DateTimeFormatter.ofPattern("HH:mm:ss")
+    val formattedTimeStart = startTime.format(formatterStart)
+
+    println("Suche begonnen um: $formattedTimeStart")
+
+    val dllDirectory: File
+
+    if(directory.equals("")) {
+        dllDirectory = File("C:\\")
+    } else {
+        dllDirectory = File(directory)
+    }
+
+    val result = searchFiles(dllDirectory, keyword)
+
+    if (result.isNotEmpty()) {
+        println("Folgende Dateien wurden gefunden:")
+        result.forEach { println(it.absolutePath) }
+    } else {
+        println("Es wurden keine DLL-Dateien mit dem angegebenen Suchwort gefunden.")
+    }
+
+    val endTime = LocalTime.now()
+
+    val formatterEnd = DateTimeFormatter.ofPattern("HH:mm:ss")
+    val formattedTimeEnd = endTime.format(formatterEnd)
+
+    println("Suche abgeschlossen um: $formattedTimeEnd")
 }
